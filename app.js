@@ -12,28 +12,14 @@ new Vue({
             this.monsterHeath = 100;
         },
         attack: function(){
-            var max = 10;
-            var min = 3;    
-            var damage = Math.max(Math.floor(Math.random() * max) + 1, min)
-            this.monsterHeath -= damage;
-
-            if(this.monsterHeath <=0){
-                alert("You Won!");
-                this.gameIsRunning = false;
+           
+            this.monsterHeath -=  this.calculateDamage(3,10);
+            if(this.checkWin()){
                 return;
             }
 
-            var max = 12;
-            var min = 5;    
-            var damage = Math.max(Math.floor(Math.random() * max) + 1, min)
-            this.playerHealth -= damage;
-
-            if(this.playerHealth <=0){
-                alert("You Lost!");
-                this.gameIsRunning = false;
-                return;
-            }
-
+            this.playerHealth -= this.calculateDamage(5,10);
+            this.checkWin();
 
         },
         specialAttack: function (){
@@ -45,6 +31,27 @@ new Vue({
         giveUp: function(){
 
 
-        }
-    },
+        },
+        calculateDamage: function(min, max){
+            return Math.max(Math.floor(Math.random() * max) + 1, min);
+        },
+        checkWin: function(){
+            if(this.monsterHeath <=0){
+                if(confirm("You won ! new Game")){
+                    this.startGame();
+                } else{
+                    this.gameIsRunning = false;
+                }
+                return true;
+            }
+            else if(this.playerHealth <=0){
+                if(confirm("You Lost ! new Game")){
+                    this.startGame();
+                } else{
+                    this.gameIsRunning = false;
+                }
+                return false;
+            }
+            }
+    }
 });
