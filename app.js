@@ -3,7 +3,8 @@ new Vue({
     data:{
         playerHealth: 100,
         monsterHeath: 100,
-        gameIsRunning: false
+        gameIsRunning: false,
+        turns:[]
     },
     methods: {
         startGame: function(){
@@ -12,8 +13,12 @@ new Vue({
             this.monsterHeath = 100;
         },
         attack: function(){
-           
-            this.monsterHeath -=  this.calculateDamage(3,10);
+            var damage = this.calculateDamage(3,10);          
+            this.monsterHeath -= damage;
+            this.turns.unshift({
+                isPlayer = true,
+                text: 'player hits for monster' + damage
+            });
             if(this.checkWin()){
                 return;
             }
@@ -27,6 +32,7 @@ new Vue({
                 return;
             }
             this.monsterAttacks();
+
         },
         heal:function(){
             if(this.playerHealth <= 90){
@@ -40,15 +46,15 @@ new Vue({
         },
         giveUp: function(){
             this.gameIsRunning = false;
-
         },
         monsterAttacks(){
             this.playerHealth -= this.calculateDamage(5, 12);
             this.checkWin();
-        },
+				},
         calculateDamage: function(min, max){
             return Math.max(Math.floor(Math.random() * max) + 1, min);
         },
+    
         checkWin: function(){
             if(this.monsterHeath <=0){
                 if(confirm("You won ! new Game")){
@@ -66,6 +72,6 @@ new Vue({
                 }
                 return false;
             }
-            }
+        }
     }
 });
